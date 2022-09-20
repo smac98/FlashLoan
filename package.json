@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/smac98/FlashLoan#readme",
   "dependencies": {
-    "ethers": "^5.7.1"
+    "dotenv": "^16.0.2",
+    "ethers": "^5.7.1",
+    "neo4j-driver": "^5.0.1"
   }
 }
