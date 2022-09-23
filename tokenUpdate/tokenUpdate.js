@@ -11,4 +11,7 @@ const tokenRelativePriceName = async (address,chain) => {
     console.log(PriceJSON.nativePrice.name,PriceJSON.usdPrice);
     return (PriceJSON.nativePrice.name,PriceJSON.usdPrice)
   };
-  tokenRelativePriceName();
+  
+  const tokenJsonPop = async (token) => {
+    
+  };
