@@ -1,0 +1,65 @@
+[
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "contract UniswapV2Factory",
+				"name": "_uniswapFactory",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_start",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_stop",
+				"type": "uint256"
+			}
+		],
+		"name": "getPairsByIndexRange",
+		"outputs": [
+			{
+				"internalType": "address[5][]",
+				"name": "",
+				"type": "address[5][]"
+			},
+			{
+				"internalType": "uint256[5][]",
+				"name": "",
+				"type": "uint256[5][]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "contract IUniswapV2Pair[]",
+				"name": "_pairs",
+				"type": "address[]"
+			}
+		],
+		"name": "getReservesByPairs",
+		"outputs": [
+			{
+				"internalType": "uint256[3][]",
+				"name": "",
+				"type": "uint256[3][]"
+			},
+			{
+				"internalType": "uint256[3][]",
+				"name": "",
+				"type": "uint256[3][]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]

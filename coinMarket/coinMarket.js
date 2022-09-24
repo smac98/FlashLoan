@@ -1,14 +1,14 @@
-const { EVMUniClone } = require("./polyMarkets");
-const { addresses  } = require("./address");
-const abi = require("./abi");
+const { EVMUniClone } = require("./tokenMarkets");
+const { addresses  } = require("../polygon/address");
+const abi = require("../polygon/abi");
 const { ethers, BigNumber, formatEther } = require("ethers");
 const BATCH_COUNT_LIMIT = 20;
 const UNISWAP_BATCH_SIZE = 100;
 const _ = require("lodash");
-const {token} = require('../neo4j/token/token');
-const {market}= require('../neo4j/market/markets')
-const {createToken, findByAddress, findByAddressAndUpdateDEC} = require("../neo4j/token/baseTokenCall");
-const { createMarket, creatTokenRelation, findTopTenMakretPD0,findTopTenMakretPD1, } = require("../neo4j/market/marketCall");
+const {token} = require('../token/token');
+const {market}= require('../market/markets')
+const {createToken, findByAddress, findByAddressAndUpdateDEC} = require("../token/baseTokenCall");
+const { createMarket, creatTokenRelation, findTopTenMakretPD0,findTopTenMakretPD1, } = require("../market/marketCall");
 const blacklistTokens = [];
 var fs = require("fs");
 class CoinMarket extends EVMUniClone {
@@ -145,8 +145,6 @@ class CoinMarket extends EVMUniClone {
   }
   //
   static async tokenCheck(tokenAddress,tokenPrice, tokenDecimal){
-    await this.sleep(200);
-   
     try {
         const found = await findByAddress(tokenAddress);
         if (found != null){
@@ -160,14 +158,12 @@ class CoinMarket extends EVMUniClone {
         else {
           let newToken = new token(tokenAddress,tokenPrice,"unin", tokenDecimal)
           let tokenAdd = await createToken(newToken);
-         //f console.log(tokenAdd);
           return tokenAdd;
         }
     } catch (error) {
-        await this.sleep(100);
+        
         let newToken = new token(tokenAddress,tokenPrice,"unin")
         let tokenAdd = await createToken(newToken);
-       //f console.log(tokenAdd);
         return tokenAdd;
     }
     
@@ -196,7 +192,6 @@ class CoinMarket extends EVMUniClone {
   //
   static  getCurrentBal(bal0,bal1){
     const final = (bal0/bal1);
-   // console.log(bal0 , bal0);
     return final;
   }
   //
