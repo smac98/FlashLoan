@@ -38,9 +38,21 @@ const pullMarkets  = async () => {
    const readJsonMarket = async()=>{
     const jsonString = fs.readFileSync('./market.json');
     const token_name_path9 = JSON.parse(jsonString);
-	
-	const markets = await Promise.all(_.map(token_name_path9, market => createMarkets(market)));
+  //   implment portion 
+	  const markets = await Promise.all(_.map(token_name_path9, market => createMarkets(market)));
     return markets;
+   };
+
+   const portion  =  (numOfInstances, index , jsonArray)=>{
+     let amoutProcessed = jsonArray.length / numOfInstances
+    let  end = amoutProcessed * index;
+    let start = end  -  amoutProcessed;
+    if (index != 4){
+    return (start, end -1);
+    }
+    else {
+      return (start, jsonArray.length -1);
+    }
    };
 
    const updateMarkets = async(markets, provider)=>{

@@ -13,28 +13,6 @@ const callJSON = async () => {
 	const token_name_path9 = JSON.parse(jsonString);
 	console.log(token_name_path9)
 	await Promise.all(_.map(token_name_path9, address => Update(address)));
-
-	// await forEach(db, async(token_name_path9) => {
-		
-	// });
-	
-
-	// fs.readFile('./tokens.json', 'utf8', (err, data) => {
-
- //    if (err) {
- //        console.log(`Error reading file from disk: ${err}`);
- //    } else {
-	// 		const databases = JSON.parse(data);    	
-	// 	}
-	// });
-
- //    for await (const db of databases) {
-        
- //        //console.log(`${db}`)
-	// 	const {name,price} = await tokenRelativePriceName(db,'polygon');
-	//     const tokenUp = new token(db,price,name)
-	// 	findByAddressAndUpdate(tokenUp)
-	// }
 };
 
 
@@ -43,10 +21,10 @@ function sleep(ms) {
 };
 
 const Update = async(address) => {
-	await sleep(10000)
+	await sleep(10000);
 	const {name,price} = await tokenRelativePriceName(address,'polygon');
-	const tokenUp = new token(address,price,name)
-	await findByAddressAndUpdate(tokenUp)		
+	const tokenUp = new token(address,price,name);
+	await findByAddressAndUpdate(tokenUp)	;	
 
 
 };
