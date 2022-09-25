@@ -10,6 +10,7 @@ const {findAll,
 require("dotenv").config();
 const {CoinMarket} = require('../coinMarket/coinMarket')
 const fs = require("fs");
+const {market} = require('../market/markets');
 const pullMarkets  = async () => {
     let allMarkets = await findAll();
     let allAddress=allMarkets.map((market) =>  createMarkets(market));
@@ -34,7 +35,20 @@ const pullMarkets  = async () => {
           );
         return uniswappyV2EthPair
     }
-   const readJson = async()=>{
-    
+   const readJsonMarket = async()=>{
+    const jsonString = fs.readFileSync('./market.json');
+    const token_name_path9 = JSON.parse(jsonString);
+	
+	const markets = await Promise.all(_.map(token_name_path9, market => createMarkets(market)));
+    return markets;
    };
-    pullMarkets();
+
+   const updateMarkets = async(markets, provider)=>{
+    //const provider = new ethers.providers.JsonRpcProvider(process.env.url);
+    provider.on('block', async (block) => {
+    console.log(block);
+    await updateReserves(provider, markets);
+     const sendVals = await Promise.all(_.map(markets, market => CoinMarket.sendMarkets(market)));
+    });
+   };
+
