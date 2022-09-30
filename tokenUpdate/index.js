@@ -10,7 +10,10 @@ const _ = require("lodash");
 const callJSON = async () => {
 	const jsonString = fs.readFileSync('./tokens.json');
 	const token_name_path9 = JSON.parse(jsonString);
-	await Promise.all(_.map(token_name_path9, address => Update(address)));
+	let addry = new Array()
+	addry=token_name_path9;
+	console.log(addry)
+	await Promise.all(addry.map(address => Update(address)));
 };
 //
 function sleep(ms) {
@@ -18,10 +21,10 @@ function sleep(ms) {
 };
 
 const Update = async(address) => {
-	await sleep(10000);
 	const {name,price} = await tokenRelativePriceName(address,'polygon');
+	await sleep(10000);
 	const tokenUp = new token(address,price,name);
-	await findByAddressAndUpdate(tokenUp)	;	
+	await findByAddressAndUpdate(tokenUp);	
 
 
 };
@@ -64,8 +67,9 @@ const writeToJson = async () => {
 
 };
 
-module.exports = {
- writeToJson ,
- callJSON
+callJSON();
+// module.exports = {
+//  writeToJson ,
+//  callJSON
 
-};
+// };

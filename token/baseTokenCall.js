@@ -47,6 +47,7 @@ const findByAddressAndUpdate = async (token) =>{
 
 const findByAddressAndUpdateDEC = async (token) =>{
     const session = driver.session();
+    console.log(token);
     const result = await session.run(`MATCH (u:Token {address : '${token.address}'}) SET u.decimal= ${token.decimal} return u`)
     await endSession(session);    
     return result.records[0].get('u').properties

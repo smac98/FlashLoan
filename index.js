@@ -5,4 +5,4 @@ const {
   readJsonMarket,
 } = require("./maketUpdated");
 
-const
+const 
