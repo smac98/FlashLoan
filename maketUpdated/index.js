@@ -11,6 +11,7 @@ require("dotenv").config();
 const {CoinMarket} = require('../coinMarket/coinMarket')
 const fs = require("fs");
 const {market} = require('../market/markets');
+const { ethers } = require("ethers");
 const pullMarkets  = async () => {
     let allMarkets = await findAll();
     let allAddress=allMarkets.map((market) =>  createMarkets(market));
@@ -57,10 +58,23 @@ const pullMarkets  = async () => {
 
    const updateMarkets = async(markets, provider)=>{
     //const provider = new ethers.providers.JsonRpcProvider(process.env.url);
+    const startBlock = await provider.getBlockNumber()
     provider.on('block', async (block) => {
     console.log(block);
     await updateReserves(provider, markets);
-     const sendVals = await Promise.all(_.map(markets, market => CoinMarket.sendMarkets(market)));
-    });
+    const sendVals = await Promise.all(_.map(markets, market => CoinMarket.sendMarkets(market)));
+    await swapBlock(block, startBlock,markets, provider);
+  });
+  
    };
 
+// swap provider 
+   const swapBlock = async(endBlock, startBlock,markets, provider)=>{
+    if(endBlock - startBlock > 30 ) {
+      provider.off('block',[block]);
+      //provider.apiKey()
+      const newProvider = new ethers.providers.JsonRpcProvider()
+      await updateMarkets(markets, newProvider)
+    }
+    
+   };
