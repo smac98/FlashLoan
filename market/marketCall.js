@@ -70,13 +70,6 @@ const endSession = async(session) => {
 }
 
 
-//LONGEST MARKET ROUTE QUERY
-// MATCH (a:Market), (b:Market)
-// WHERE id(a) =0 AND id(b) = 4
-// WITH a,b
-// MATCH p=(a)-[*]-(b)
-// RETURN p, length(p) ORDER BY length(p) DESC LIMIT 1
-
 module.exports = {
     findAll,
     creatTokenRelation,

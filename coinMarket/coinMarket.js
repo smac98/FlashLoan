@@ -210,21 +210,11 @@ class CoinMarket extends EVMUniClone {
   //
   static  async sendMarkets(pair){
     // add other token.....  
-   // console.log(` hi ${CoinMarket.getCurrentBal(CoinMarket.toDecimal(pair._tokenBalances[pair._tokens[0]]), CoinMarket.toDecimal(pair._tokenBalances[pair._tokens[1]] ))} -- ${pair._marketAddress} \n \n `);
-  //const pBalacne1 = CoinMarket.toDecimal(pair._tokenBalances[pair._tokens[0]],pair._tokenPrices) 
-  //const pBalacne2 = CoinMarket.toDecimal(pair._tokenBalances[pair._tokens[1]])
-  //console.log(pair) 
-  //await this.sleep(100);
-   const token_price0 = await CoinMarket.tokenCheck(pair._tokens[0],pair._tokenPricesDEC[pair._tokens[0]],pair._tokenDecimal[pair._tokens[0]]);
-  //console.log(token_price0)
-    //await this.sleep(100);
+    const token_price0 = await CoinMarket.tokenCheck(pair._tokens[0],pair._tokenPricesDEC[pair._tokens[0]],pair._tokenDecimal[pair._tokens[0]]);
     const token_price1 = await CoinMarket.tokenCheck(pair._tokens[1],pair._tokenPricesDEC[pair._tokens[1]],pair._tokenDecimal[pair._tokens[1]]);
-  //  console.log(token_price1)
-    
     let pd0 = await CoinMarket.percentDif(pair._tokenPricesDEC[pair._tokens[0]],token_price0.relativePrice);
     let pd1 = await CoinMarket.percentDif(pair._tokenPricesDEC[pair._tokens[1]],token_price1.relativePrice);
     const marketUpload = new market(pair._marketAddress,pair._protocol,pd0,pd1,pair._tokenBalancesDEC[pair._tokens[0]],pair._tokenBalancesDEC[pair._tokens[1]],pair._tokens[0], pair._tokens[1]);
-   // await this.sleep(100);
     let res = CoinMarket.checkMarket(marketUpload);
     return res;
   }

@@ -69,12 +69,28 @@ const pullMarkets  = async () => {
    };
 
 // swap provider 
-   const swapBlock = async(endBlock, startBlock,markets, provider)=>{
+   const swapBlock = async(endBlock, startBlock,markets, provider) => {
     if(endBlock - startBlock > 30 ) {
       provider.off('block',[block]);
-      //provider.apiKey()
-      const newProvider = new ethers.providers.JsonRpcProvider()
-      await updateMarkets(markets, newProvider)
+      let url;
+      switch (provider.apiKey()) {
+        case process.env.infuraApi:
+          url = process.env.infura2
+        break;
+        case process.env.infuraApi2:
+          url =  process.env.infura
+        break;
+        default:
+          url =  process.env.infura
+      }
+      const newProvider = new ethers.providers.JsonRpcProvider(url)
+      await updateMarkets(markets, newProvider);
     }
     
+   };
+   module.exports = {
+ pullMarkets,  
+ updateMarkets,
+ portion,
+ readJsonMarket,
    };

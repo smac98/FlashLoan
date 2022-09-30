@@ -9,13 +9,10 @@ const _ = require("lodash");
 
 const callJSON = async () => {
 	const jsonString = fs.readFileSync('./tokens.json');
-
 	const token_name_path9 = JSON.parse(jsonString);
-	console.log(token_name_path9)
 	await Promise.all(_.map(token_name_path9, address => Update(address)));
 };
-
-
+//
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
@@ -30,7 +27,7 @@ const Update = async(address) => {
 };
 
 
-const main = async () => {
+const writeToJson = async () => {
 	try {
 
 	//write the pull alll tokens 
@@ -67,4 +64,8 @@ const main = async () => {
 
 };
 
-callJSON();
+module.exports = {
+ writeToJson ,
+ callJSON
+
+};
