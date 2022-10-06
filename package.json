@@ -22,6 +22,7 @@
     "dotenv": "^16.0.2",
     "ethers": "^5.7.1",
     "neo4j-driver": "^5.0.1",
+    "node-fetch": "^3.2.10",
     "request-promise": "^4.2.6"
   }
 }

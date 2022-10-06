@@ -1,5 +1,7 @@
 const neo4j = require("neo4j-driver");
 const token = require("./token");
+const fs = require('fs');
+const _ = require("lodash");
 require('dotenv').config()
 const {
     url,
@@ -41,7 +43,19 @@ const createToken = async (token) =>{
 const findByAddressAndUpdate = async (token) =>{
     const session = driver.session();
     const result = await session.run(`MATCH (u:Token {address : '${token.address}'}) SET u.relativePrice= ${token.relativePrice} return u`)
-    await endSession(session);    
+    
+    await endSession(session);   
+    var json = JSON.stringify(result.records[0].get('u').properties);
+    fs.writeFile(
+	      `./tokens-ans.json`,
+	      json,
+	      "utf8",
+	      function (err) {
+	        if (err) return console.log(err);
+	        console.log("Note added");
+	      }
+	    ); 
+    console.log(result.records[0].get('u').properties)
     return result.records[0].get('u').properties
 }
 

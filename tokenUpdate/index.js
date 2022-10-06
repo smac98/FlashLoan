@@ -13,7 +13,11 @@ const callJSON = async () => {
 	let addry = new Array()
 	addry=token_name_path9;
 	console.log(addry)
-	await Promise.all(addry.map(address => Update(address)));
+	for await (const results of addry) {
+		await sleep(200);
+		await  Update(results);
+	  }
+	//await Promise.all(addry.map(address => Update(address)));
 };
 //
 function sleep(ms) {
@@ -21,10 +25,15 @@ function sleep(ms) {
 };
 
 const Update = async(address) => {
-	const {name,price} = await tokenRelativePriceName(address,'polygon');
-	await sleep(10000);
-	const tokenUp = new token(address,price,name);
-	await findByAddressAndUpdate(tokenUp);	
+	
+	 await tokenRelativePriceName(address,'polygon').then(async( data)  => { const tokenUp = new token(address,data.price,data.name);
+		
+		await findByAddressAndUpdate(tokenUp);
+	});
+
+	
+
+	//	
 
 
 };
