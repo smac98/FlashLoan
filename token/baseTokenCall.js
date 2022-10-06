@@ -1,8 +1,9 @@
+require('dotenv').config({ path: '../.env' })
 const neo4j = require("neo4j-driver");
 const token = require("./token");
 const fs = require('fs');
 const _ = require("lodash");
-require('dotenv').config()
+
 const {
     url,
     db_username,

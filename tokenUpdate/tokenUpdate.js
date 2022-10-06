@@ -39,5 +39,4 @@ const tokenRelativePriceName = async (address,chain) => {
   
 //   };
 //   swapToken('0xd6df932a45c0f255f85145f286ea0b292b21c90b','polygon');
-tokenRelativePriceName('0xb33eaad8d922b1083446dc23f610c2567fb5180f','polygon')
 module.exports={tokenRelativePriceName};

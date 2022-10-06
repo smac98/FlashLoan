@@ -2,22 +2,33 @@
 const neo4j = require("neo4j-driver");
 const {token} = require("../token/token");
 const {tokenRelativePriceName} = require("./tokenUpdate");
-require('dotenv').config()
+require('dotenv').config({ path: '../.env' })
 const { findAll,findByAddressAndUpdateDEC,findByAddress,findByAddressAndUpdate,findByAddressAndDelete } = require("../token/baseTokenCall");
 const fs = require('fs');
 const _ = require("lodash");
 
-const callJSON = async () => {
+const portion  =  (numOfInstances, index , jsonArray)=>{
+	let amoutProcessed = jsonArray.length / numOfInstances
+   let  end = amoutProcessed * index;
+   let start = end  -  amoutProcessed;
+   if (index != 4){
+   return (start, end -1);
+   }
+   else {
+	 return (start, jsonArray.length -1);
+   }
+  };
+
+const updateTokenFromJson = async () => {
 	const jsonString = fs.readFileSync('./tokens.json');
 	const token_name_path9 = JSON.parse(jsonString);
 	let addry = new Array()
-	addry=token_name_path9;
-	console.log(addry)
+	const {start,finish}=portion(process.env.instanceAmount,process.env.indexNumber,token_name_path9);
+	addry=token_name_path9.splice(start,finish);
 	for await (const results of addry) {
 		await sleep(200);
 		await  Update(results);
 	  }
-	//await Promise.all(addry.map(address => Update(address)));
 };
 //
 function sleep(ms) {
@@ -76,9 +87,8 @@ const writeToJson = async () => {
 
 };
 
-callJSON();
-// module.exports = {
-//  writeToJson ,
-//  callJSON
 
-// };
+module.exports = {
+ writeToJson ,
+ updateTokenFromJson
+};

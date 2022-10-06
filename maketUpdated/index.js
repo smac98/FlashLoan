@@ -1,4 +1,6 @@
 //jji
+require("dotenv").config({ path: '../.env' });
+
 const {findAll,
     creatTokenRelation,
     findByMarketAddress,
@@ -7,7 +9,7 @@ const {findAll,
     createMarket,
     findByAddressAndUpdate,
     findByAddressAndDelete} = require("../market/marketCall");
-require("dotenv").config();
+
 const {CoinMarket} = require('../coinMarket/coinMarket')
 const fs = require("fs");
 const {market} = require('../market/markets');
@@ -40,19 +42,21 @@ const pullMarkets  = async () => {
     const jsonString = fs.readFileSync('./market.json');
     const token_name_path9 = JSON.parse(jsonString);
   //   implment portion 
-	  const markets = await Promise.all(_.map(token_name_path9, market => createMarkets(market)));
+    const {startNum:start, endNum:finish} = portion(process.env.instanceAmount,process.env.indexNumber,token_name_path9);
+    const markets = await Promise.all(_.map(token_name_path9.splice(start,finish), market => createMarkets(market)));
     return markets;
    };
 
    const portion  =  (numOfInstances, index , jsonArray)=>{
-     let amoutProcessed = jsonArray.length / numOfInstances
+    let amoutProcessed = jsonArray.length / numOfInstances
     let  end = amoutProcessed * index;
     let start = end  -  amoutProcessed;
+    console.log(numOfInstances, index,"   hh" )
     if (index != 4){
-    return (start, end -1);
+    return {startNum:start, endNum:(end-1)};
     }
     else {
-      return (start, jsonArray.length -1);
+      return {startNum:start, endNum:(jsonArray.length-1)};
     }
    };
 
@@ -73,21 +77,23 @@ const pullMarkets  = async () => {
     if(endBlock - startBlock > 30 ) {
       provider.off('block',[block]);
       let url;
-      switch (provider.apiKey()) {
-        case process.env.infuraApi:
+      switch (provider.connection.url) {
+        case process.env.infura:
           url = process.env.infura2
         break;
-        case process.env.infuraApi2:
+        case process.env.infura2:
           url =  process.env.infura
         break;
         default:
-          url =  process.env.infura
+          url =  process.env.infura2
       }
       const newProvider = new ethers.providers.JsonRpcProvider(url)
       await updateMarkets(markets, newProvider);
     }
     
    };
+   
+
    module.exports = {
  pullMarkets,  
  updateMarkets,
