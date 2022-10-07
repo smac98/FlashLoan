@@ -20,7 +20,7 @@ const portion  =  (numOfInstances, index , jsonArray)=>{
   };
 
 const updateTokenFromJson = async () => {
-	const jsonString = fs.readFileSync('./tokens.json');
+	const jsonString = fs.readFileSync(require.resolve('./tokens.json'));
 	const token_name_path9 = JSON.parse(jsonString);
 	let addry = new Array()
 	const {start,finish}=portion(process.env.instanceAmount,process.env.indexNumber,token_name_path9);

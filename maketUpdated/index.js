@@ -9,7 +9,7 @@ const {findAll,
     createMarket,
     findByAddressAndUpdate,
     findByAddressAndDelete} = require("../market/marketCall");
-
+const _ = require("lodash");
 const {CoinMarket} = require('../coinMarket/coinMarket')
 const fs = require("fs");
 const {market} = require('../market/markets');
@@ -39,9 +39,10 @@ const pullMarkets  = async () => {
         return uniswappyV2EthPair
     }
    const readJsonMarket = async()=>{
-    const jsonString = fs.readFileSync('./market.json');
+    const jsonString = fs.readFileSync(require.resolve('./market.json'));
     const token_name_path9 = JSON.parse(jsonString);
   //   implment portion 
+    console.log(token_name_path9)
     const {startNum:start, endNum:finish} = portion(process.env.instanceAmount,process.env.indexNumber,token_name_path9);
     const markets = await Promise.all(_.map(token_name_path9.splice(start,finish), market => createMarkets(market)));
     return markets;
@@ -51,7 +52,6 @@ const pullMarkets  = async () => {
     let amoutProcessed = jsonArray.length / numOfInstances
     let  end = amoutProcessed * index;
     let start = end  -  amoutProcessed;
-    console.log(numOfInstances, index,"   hh" )
     if (index != 4){
     return {startNum:start, endNum:(end-1)};
     }
@@ -65,7 +65,7 @@ const pullMarkets  = async () => {
     const startBlock = await provider.getBlockNumber()
     provider.on('block', async (block) => {
     console.log(block);
-    await updateReserves(provider, markets);
+    await CoinMarket.updateReserves(provider, markets);
     const sendVals = await Promise.all(_.map(markets, market => CoinMarket.sendMarkets(market)));
     await swapBlock(block, startBlock,markets, provider);
   });
@@ -92,7 +92,17 @@ const pullMarkets  = async () => {
     }
     
    };
-   
+
+async function main(){
+  const provider = new ethers.providers.JsonRpcProvider(process.env.infura);
+console.log(provider.apiKey,process.env.infura )
+const  market = await readJsonMarket().then((markets) => {
+    //console.log(markets)
+    
+  });
+  await updateMarkets(market,provider);
+};
+main();
 
    module.exports = {
  pullMarkets,  
