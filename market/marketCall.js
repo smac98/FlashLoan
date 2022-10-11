@@ -42,8 +42,13 @@ const creatTokenRelation = async (market) => {
 const findByMarketAddress = async (market) =>{
     const session = driver.session();
     const result = await session.run(`MATCH (u:Market {address : '${market.address}'} ) return u limit 1`)
-    await endSession(session);    
-    return result.records[0].get('u').properties
+    await endSession(session);
+    try {
+       return result.records[0].get('u').properties;
+    }
+    catch (error){
+        return null;
+    }
 }
 const createMarket = async (market) =>{
     const session = driver.session();
@@ -54,8 +59,10 @@ const createMarket = async (market) =>{
 }
 const findByAddressAndUpdate = async (market) =>{
     const session = driver.session();
-    const result = await session.run(`MATCH (u:Token {address : '${market.address}'}) SET u.priceDif0= ${market.priceDif0} , u.priceDif1 = ${market.priceDif1}, u.balanceToken0= ${market.balanceToken0}, u.balanceToken1= ${market.balanceToken1} return u`)
+    const result = await session.run(`MATCH (u:Market {address : '${market.address}'}) SET u.priceDif0= ${market.priceDif0} , u.priceDif1 = ${market.priceDif1}, u.balanceToken0= ${market.balanceToken0}, u.balanceToken1= ${market.balanceToken1} return u`)
+    
     await endSession(session);    
+    //console.log(result)
     return result.records[0].get('u').properties
 }
 const findByAddressAndDelete = async (market) =>{

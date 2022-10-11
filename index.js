@@ -6,8 +6,9 @@ const provider = new ethers.providers.JsonRpcProvider(process.env.infura);
 console.log(provider.apiKey,process.env.infura )
 async function main(){
   await readJsonMarket().then(async(markets)=>{
+    await updateTokenFromJson();
     await updateMarkets(markets,provider);
   });
-  await updateTokenFromJson();
+ 
 };
 main();

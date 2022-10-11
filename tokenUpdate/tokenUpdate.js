@@ -6,11 +6,11 @@ function sleep(ms) {
 };
 
 const tokenRelativePriceName = async (address,chain) => {
-  
+  let token = swapTokenApi();
   var PriceCoingeckoOptions = {
         method: "GET",
         url: `https://deep-index.moralis.io/api/v2/erc20/${address}/price?chain=${chain}`,
-        headers: {'X-API-Key': `${process.env.tokenKey}`},
+        headers: {'X-API-Key': `${token}`},
       };
 
       console.log(PriceCoingeckoOptions);
@@ -20,7 +20,27 @@ const tokenRelativePriceName = async (address,chain) => {
     return {name: PriceJSON.nativePrice.name, price: PriceJSON.usdPrice};
   };
 
-//   const swapToken = (address,chain)=>{
+
+  const swapTokenApi = ()=>{
+    let min = 1;
+    let max = 2;
+    let tokenkey;
+    let randomNum = Math.random() * (max - min) + min;
+    switch (randomNum) {
+      case 1:
+      tokenkey = process.env.block1
+        break;
+      case 2:
+      tokenkey = process.env.block2
+      break;
+    
+      default:
+      tokenkey = process.env.block1
+        break;
+    }
+    return tokenkey ;
+  };
+  //   const swapToken = (address,chain)=>{
 //     const url =`https://deep-index.moralis.io/api/v2/erc20/${address}/price?chain=${chain}`,
 //     const options = {
 //   method: 'GET',

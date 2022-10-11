@@ -8,7 +8,7 @@ const _ = require("lodash");
 const {token} = require('../token/token');
 const {market}= require('../market/markets')
 const {createToken, findByAddress, findByAddressAndUpdateDEC} = require("../token/baseTokenCall");
-const { createMarket, creatTokenRelation, findTopTenMakretPD0,findTopTenMakretPD1, } = require("../market/marketCall");
+const { createMarket, creatTokenRelation, findByAddressAndUpdate} = require("../market/marketCall");
 const blacklistTokens = [];
 var fs = require("fs");
 class CoinMarket extends EVMUniClone {
@@ -173,6 +173,7 @@ class CoinMarket extends EVMUniClone {
     await this.sleep(100);
 
     try {
+    
       const found = await findByMarketAddress(market);
       if (found != null){
         let res2 = await creatTokenRelation(market);
@@ -218,6 +219,16 @@ class CoinMarket extends EVMUniClone {
     let res = CoinMarket.checkMarket(marketUpload);
     return res;
   }
+
+  static async sendUpdate(pair){
+    let t0 = await findByAddress(pair._tokens[0]);
+    let t1 = await findByAddress(pair._tokens[0]);
+    let pd0 = await CoinMarket.percentDif(pair._tokenPricesDEC[pair._tokens[0]],t0.relativePrice);
+    let pd1 = await CoinMarket.percentDif(pair._tokenPricesDEC[pair._tokens[1]],t1.relativePrice);
+    const marketUpload = new market(pair._marketAddress,pair._protocol,pd0,pd1,pair._tokenBalancesDEC[pair._tokens[0]],pair._tokenBalancesDEC[pair._tokens[1]],pair._tokens[0], pair._tokens[1]);
+    const final = await findByAddressAndUpdate(marketUpload);
+    return final;
+  }
   // call the view unit swap function to update all market data including balances and prices
   static async updateReserves(provider, allMarketPairs) {
     const uniswapQuery = new ethers.Contract(
@@ -225,11 +236,11 @@ class CoinMarket extends EVMUniClone {
       abi.UNISWAP_QUERY_ABI_DEC,
       provider
     );
-    //console.log(allMarketPairs)
+   // console.log(allMarketPairs)
     const pairAddresses = allMarketPairs.map(
       (marketPair) => marketPair.marketAddress
     );
-    //console.log("Updating markets,nn count: \n", pairAddresses);
+  //  console.log("Updating markets,nn count: \n", pairAddresses);
     const res = (await uniswapQuery.functions.getReservesByPairs(pairAddresses));
     const {0: reserves, 1: decimals } = res;
     console.log("Updating markets, count:",reserves.length);

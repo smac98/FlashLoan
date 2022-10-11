@@ -26,7 +26,7 @@ const updateTokenFromJson = async () => {
 	const {start,finish}=portion(process.env.instanceAmount,process.env.indexNumber,token_name_path9);
 	addry=token_name_path9.splice(start,finish);
 	for await (const results of addry) {
-		await sleep(200);
+		await sleep(210);
 		await  Update(results);
 	  }
 };
