@@ -19,14 +19,14 @@ const findAll = async () =>{
 }
 const findTopTenMakretPD0 = async () =>{
     const session = driver.session();
-    const result = await session.run(`MATCH (u:Market) WHERE (u.priceDif0 >= 0.08) return u ORDER BY u.priceDif0 DESC limit 6`)
+    const result = await session.run(`MATCH (u:Market) WHERE (u.priceDif0 >= 0.08) and (u.balanceToken0 >= 1) and (u.balanceToken1 >= 1)  return u ORDER BY u.priceDif0 DESC limit 4`)
     await endSession(session);    
     return result.records[0].get('u').properties
 }
 
 const findTopTenMakretPD1 = async () =>{
     const session = driver.session();
-    const result = await session.run(`MATCH (u:Market) WHERE (u.priceDif1 >= 0.008) return u ORDER BY u.priceDif1 DESC limit 6`)
+    const result = await session.run(`MATCH (u:Market) WHERE (u.priceDif1 >= 0.008) and (u.balanceToken0 >= 1) return u ORDER BY u.priceDif1 DESC limit 6`)
     await endSession(session);    
     return result.records[0].get('u').properties
 }
@@ -88,3 +88,10 @@ module.exports = {
     findByAddressAndUpdate,
     findByAddressAndDelete
 };
+
+/**
+MATCH p=(f:Company)-[:HAS_INVOICE*1..10]->(t:Company) 
+WHERE all(r IN relationships(p) WHERE r.invoiceState in ['DUE', 'OVERDUE'])
+RETURN p;
+
+**/
