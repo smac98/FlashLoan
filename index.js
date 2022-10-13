@@ -21,7 +21,7 @@ async function main(){
   // });
  
   console.log(long)
- // console.log(long2)
+ console.log(long2)
  
 };
 main();

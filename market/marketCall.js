@@ -19,16 +19,16 @@ const findAll = async () =>{
 }
 const findTopTenMakretPD0 = async () =>{
     const session = driver.session();
-    const result = await session.run(`MATCH (u:Market) WHERE (u.priceDif0 >= 0.08) and (u.balanceToken0 >= 1) and (u.balanceToken1 >= 1)  return u ORDER BY u.priceDif0 DESC limit 4`)
+    const result = await session.run(`MATCH (u:Market) WHERE (u.balanceToken0 >= 1) and (u.balanceToken1 >= 1)  return u ORDER BY u.priceDif0 DESC limit 4`)
     await endSession(session);    
-    return result.records[0].get('u').properties
+    return result.records.map(i=>i.get('u').properties)
 }
 
 const findTopTenMakretPD1 = async () =>{
     const session = driver.session();
-    const result = await session.run(`MATCH (u:Market) WHERE (u.priceDif1 >= 0.008) and (u.balanceToken0 >= 1) return u ORDER BY u.priceDif1 DESC limit 6`)
+    const result = await session.run(`MATCH (u:Market) WHERE  (u.balanceToken0 >= 1) and (u.balanceToken1 >= 1) return u ORDER BY u.priceDif1 DESC limit 6`)
     await endSession(session);    
-    return result.records[0].get('u').properties
+    return result.records.map(i=>i.get('u').properties)
 }
 
 const creatTokenRelation = async (market) => {

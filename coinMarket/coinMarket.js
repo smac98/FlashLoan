@@ -140,7 +140,7 @@ class CoinMarket extends EVMUniClone {
   }
 //
   static  async percentDif(currentP,price){
-    let priceDif = ((currentP-price)/((currentP+price)/2))*100;
+    let priceDif = ((currentP -price )/((currentP)))*100;
     return priceDif
   }
   //
