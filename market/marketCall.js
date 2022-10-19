@@ -52,14 +52,14 @@ const findByMarketAddress = async (market) =>{
 }
 const createMarket = async (market) =>{
     const session = driver.session();
-    await session.run(`CREATE (u:Market {address : '${market.address}', dexName: '${market.dexName}', priceDif0: ${market.priceDif0}, priceDif1: ${market.priceDif1}, balanceToken0: ${market.balanceToken0}, balanceToken1: ${market.balanceToken1}, token1: '${market.token1}', token0: '${market.token0}' } ) return u`)
+    await session.run(`CREATE (u:Market {address : '${market.address}', dexName: '${market.dexName}', price0: ${market.price0}, price1: ${market.price1}, priceDif0: ${market.priceDif0}, priceDif1: ${market.priceDif1}, balanceToken0: ${market.balanceToken0}, balanceToken1: ${market.balanceToken1}, token1: '${market.token1}', token0: '${market.token0}' } ) return u`)
     const res = await findByMarketAddress(market)
     await endSession(session);   
     return res;
 }
 const findByAddressAndUpdate = async (market) =>{
     const session = driver.session();
-    const result = await session.run(`MATCH (u:Market {address : '${market.address}'}) SET u.priceDif0= ${market.priceDif0} , u.priceDif1 = ${market.priceDif1}, u.balanceToken0= ${market.balanceToken0}, u.balanceToken1= ${market.balanceToken1} return u`)
+    const result = await session.run(`MATCH (u:Market {address : '${market.address}'}) SET u.priceDif0= ${market.priceDif0} , u.priceDif1 = ${market.priceDif1}, u.balanceToken0= ${market.balanceToken0}, u.balanceToken1= ${market.balanceToken1}  , u.price0: ${market.price0}, u.price1: ${market.price1}return u`)
     
     await endSession(session);    
     //console.log(result)

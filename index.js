@@ -15,13 +15,12 @@ const { findAll,
 async function main(){
  let long= await findTopTenMakretPD0();
  let long2= await findTopTenMakretPD1();
-  // await readJsonMarket().then(async(markets)=>{
-  //   await updateTokenFromJson();
-  //   await updateMarkets(markets,provider);
-  // });
- 
-  console.log(long)
- console.log(long2)
+  await readJsonMarket().then(async(markets)=>{
+    await updateTokenFromJson();
+    await updateMarkets(markets,provider);
+  });
+ //console.log(long)
+ //console.log(long2)
  
 };
 main();

@@ -1,5 +1,5 @@
 class market {
-    constructor(address,dexName, priceDif0,priceDif1,balanceToken0,balanceToken1,token0, token1){
+    constructor(address,dexName, priceDif0,priceDif1,balanceToken0,balanceToken1,token0, token1, price0, price1){
         this.address = address;
         this.dexName = dexName;
         this.priceDif0 = priceDif0;
@@ -8,9 +8,17 @@ class market {
         this.balanceToken1 = balanceToken1;
         this.token0 = token0;
         this.token1 = token1;
+        this.price0 = price0;
+        this.price1 = price1;
     }
     get getaddress(){
         return this.address;
+    }
+    get getPrice0(){
+        return  this.price0;
+    }
+    get getPrice1(){
+        return  this.price1;
     }
     get getPriceDif0(){
         return  this.priceDif0;
