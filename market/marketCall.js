@@ -40,7 +40,7 @@ const findTopTenMakretPD1 = async () =>{
 
 const creatTokenRelation = async (market) => {
     const session = driver.session();
-    const result = await session.run(`MATCH (u:Market), (t0:Token ), (t1:Token) WHERE u.address='${market.address}' AND t0.address='${market.token0}' AND t1.address='${market.token1}'   CREATE (u)-[r:TOKEN1]->(t1),(u)-[r0:TOKEN0]->(t0) return u,t0,t1`)
+    const result = await session.run(`MATCH (u:Market), (t0:Token ), (t1:Token) WHERE u.address='${market.address}' AND t0.address='${market.token0}' AND t1.address='${market.token1}'   CREATE (u)-[r:TOKEN]->(t1),(u)-[r0:TOKEN]->(t0) return u,t0,t1`)
     await endSession(session);
     return result.records[0].get('u').properties
 }
