@@ -9,7 +9,9 @@ const {
 const driver = neo4j.driver(url, neo4j.auth.basic(db_username, db_password));
 const {createToken,findByAddress} = require("../token/baseTokenCall");
 
-
+const findPath = async()=>{
+    
+};
 
 const findAll = async () =>{
     const session = driver.session();

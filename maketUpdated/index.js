@@ -14,6 +14,7 @@ const {CoinMarket} = require('../coinMarket/coinMarket')
 const fs = require("fs");
 const {market} = require('../market/markets');
 const { ethers } = require("ethers");
+const address = require("../polygon/address");
 const pullMarkets  = async () => {
     let allMarkets = await findAll();
     let allAddress=allMarkets.map((market) =>  createMarkets(market));
@@ -62,6 +63,16 @@ const pullMarkets  = async () => {
     }
    };
 
+const swapToken = async()=>{
+  const jsonString = fs.readFileSync(require.resolve('../polygon/address/base-token.json'));
+  const token_name_ = JSON.parse(jsonString);
+  for (const [name , address] of Object.entries(token_name_)){
+    console.log(name , address)
+  }
+};
+const tone = async() =>{
+  // find token  - take the the price then  find lowest market price --take the second token and find its next market that is less than.
+};
    const updateMarkets = async(markets, provider)=>{
     const startBlock = await provider.getBlockNumber()
     let flag = true
@@ -117,7 +128,7 @@ const pullMarkets  = async () => {
 //   //console.log(market)
 // };
 // main();
-
+swapToken();
    module.exports = {
  pullMarkets,  
  updateMarkets,
