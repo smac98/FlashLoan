@@ -9,8 +9,13 @@ const {
 const driver = neo4j.driver(url, neo4j.auth.basic(db_username, db_password));
 const {createToken,findByAddress} = require("../token/baseTokenCall");
 
-const findPath = async()=>{
-    
+const findPath = async(address)=>{
+    const session = driver.session();
+    const result = await session.run(`MATCH (u:Token {address : '${address}'} )  MATCH path = ((u)-[:TOKEN1*1..6]-(lastKid:Market)) MATCH path2 = ((u)-[:TOKEN2*1..6]-(lastKid:Market))  return path, path2 `)
+    await endSession(session);    
+    console.log(result.records[0]) 
+    return result.records.map(i=>i.get('path').properties)
+
 };
 
 const findAll = async () =>{
@@ -61,7 +66,7 @@ const createMarket = async (market) =>{
 }
 const findByAddressAndUpdate = async (market) =>{
     const session = driver.session();
-    const result = await session.run(`MATCH (u:Market {address : '${market.address}'}) SET u.priceDif0= ${market.priceDif0} , u.priceDif1 = ${market.priceDif1}, u.balanceToken0= ${market.balanceToken0}, u.balanceToken1= ${market.balanceToken1}  , u.price0: ${market.price0}, u.price1: ${market.price1}return u`)
+    const result = await session.run(`MATCH (u:Market {address : '${market.address}'}) SET u.priceDif0= ${market.priceDif0} , u.priceDif1 = ${market.priceDif1}, u.balanceToken0= ${market.balanceToken0}, u.balanceToken1= ${market.balanceToken1}  , u.price0= ${market.price0}, u.price1= ${market.price1} return u`)
     
     await endSession(session);    
     //console.log(result)
@@ -82,6 +87,7 @@ const endSession = async(session) => {
 
 module.exports = {
     findAll,
+    findPath,
     creatTokenRelation,
     findByMarketAddress,
     findTopTenMakretPD0,

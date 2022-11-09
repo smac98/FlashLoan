@@ -7,6 +7,7 @@ const {findAll,
     findTopTenMakretPD0,
     findTopTenMakretPD1,
     createMarket,
+    findPath,
     findByAddressAndUpdate,
     findByAddressAndDelete} = require("../market/marketCall");
 const _ = require("lodash");
@@ -68,9 +69,11 @@ const swapToken = async()=>{
   const token_name_ = JSON.parse(jsonString);
   for (const [name , address] of Object.entries(token_name_)){
     console.log(name , address)
+    await findPath(address);
   }
 };
 const tone = async() =>{
+
   // find token  - take the the price then  find lowest market price --take the second token and find its next market that is less than.
 };
    const updateMarkets = async(markets, provider)=>{
