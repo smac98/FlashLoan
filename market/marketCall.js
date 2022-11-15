@@ -6,15 +6,16 @@ const {
     db_username,
     db_password,
 } = process.env;
-const driver = neo4j.driver(url, neo4j.auth.basic(db_username, db_password));
+const driver = neo4j.driver(url, neo4j.auth.basic(db_username, db_password),  { disableLosslessIntegers: true });
 const {createToken,findByAddress} = require("../token/baseTokenCall");
 
 const findPath = async(address)=>{
     const session = driver.session();
-    const result = await session.run(`MATCH (u:Token {address : '${address}'} )  MATCH path = ((u)-[:TOKEN1*1..6]-(lastKid:Market)) MATCH path2 = ((u)-[:TOKEN2*1..6]-(lastKid:Market))  return path, path2 `)
+    const result = await session.run(`MATCH (u:Market) WHERE (u.token1='${address}') or (u.token0='${address}')  return u  ORDER BY u.price0, u.price1 limit 2`)
     await endSession(session);    
-    console.log(result.records[0]) 
-    return result.records.map(i=>i.get('path').properties)
+    //console.log(result.records.map(i=>i.get('path'))) 
+    console.log(result.records.map(i=>i.get('u').properties))
+    return result.records.map(i=>i.get('u').properties)
 
 };
 
