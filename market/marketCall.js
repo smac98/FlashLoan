@@ -11,7 +11,7 @@ const {createToken,findByAddress} = require("../token/baseTokenCall");
 
 const findPath = async(address)=>{
     const session = driver.session();
-    const result = await session.run(`MATCH (u:Market) WHERE (u.token1='${address}') or (u.token0='${address}')  return u  ORDER BY u.price0, u.price1 limit 2`)
+    const result = await session.run(`MATCH (u:Market) WHERE (u.token1='${address}') or (u.token0='${address}') return u CASE WHERE u.price0 ='${address}' then ORDER BY u.price0 WHERE u.price1 ='${address}' then ORDER BY u.price1 else ORDER BY u.price0  limit 2`) //case
     await endSession(session);    
     //console.log(result.records.map(i=>i.get('path'))) 
     console.log(result.records.map(i=>i.get('u').properties))
