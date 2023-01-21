@@ -76,9 +76,18 @@ const swapToken = async()=>{
     l=kop.flatMap((i) => i)
     nexttoken = nexttoken.concat(l)
   }
-  //in method elimante one of two option f
+  //in method elimante one of two option first - then pull
    console.log(nexttoken)
 };
+const pathFinder = async() =>{ // pull path for token 
+
+
+};
+
+const evalMarket = async(market0, market1) =>{//which produceses higher yeild 
+
+};
+
 const tone = async() =>{
 
   // find token  - take the the price then  find lowest market price --take the second token and find its next market that is less than.
