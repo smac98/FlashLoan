@@ -16,8 +16,10 @@ const fs = require("fs");
 const {market} = require('../market/markets');
 const { ethers } = require("ethers");
 const address = require("../polygon/address");
+
 const pullMarkets  = async () => {
     let allMarkets = await findAll();
+    
     let allAddress=allMarkets.map((market) =>  createMarkets(market));
    // console.log(allAddress)
     var json = JSON.stringify(allAddress);
@@ -30,17 +32,17 @@ const pullMarkets  = async () => {
         console.log("Note added");
       }
     );
-    };
+};
 
-    const createMarkets = (market)=>{
+const createMarkets = (market)=>{
         const uniswappyV2EthPair = new CoinMarket(
             market._marketAddress,
             [market._tokens[0], market._tokens[1]],
             market._protocol
           );
         return uniswappyV2EthPair
-    }
-   const readJsonMarket = async()=>{
+}
+const readJsonMarket = async()=>{
     const jsonString = fs.readFileSync(require.resolve('./market.json'));
     const token_name_path9 = JSON.parse(jsonString);
   //   implment portion 
@@ -48,11 +50,11 @@ const pullMarkets  = async () => {
     const {startNum:start, endNum:finish} = portion(process.env.instanceAmount,process.env.indexNumber,token_name_path9);
     const portions = token_name_path9.splice(start,finish)
     const markets = await Promise.all(_.map(portions, market => createMarkets(market)));
-   // console.log(markets)
+    console.log(markets)
     return markets;
-   };
+};
 
-   const portion  =  (numOfInstances, index , jsonArray)=>{
+const portion  =  (numOfInstances, index , jsonArray)=>{
     let amoutProcessed = jsonArray.length / numOfInstances
     let  end = amoutProcessed * index;
     let start = end  -  amoutProcessed;
@@ -62,37 +64,42 @@ const pullMarkets  = async () => {
     else {
       return {startNum:start, endNum:(jsonArray.length-1)};
     }
-   };
+};
 
 const swapToken = async()=>{
   const jsonString = fs.readFileSync(require.resolve('../polygon/address/base-token.json'));
   const token_name_ = JSON.parse(jsonString);
+  let nexttoken = []
   for (const [name , address] of Object.entries(token_name_)){
     console.log(name , address)
-    await findPath(address);
+    kop=await findPath(address)
+    l=kop.flatMap((i) => i)
+    nexttoken = nexttoken.concat(l)
   }
+  //in method elimante one of two option f
+   console.log(nexttoken)
 };
 const tone = async() =>{
 
   // find token  - take the the price then  find lowest market price --take the second token and find its next market that is less than.
 };
-   const updateMarkets = async(markets, provider)=>{
+const updateMarkets = async(markets, provider)=>{
     const startBlock = await provider.getBlockNumber()
-    let flag = true
+    let flag = true;
     provider.on('block', async (block) => {
     console.log(block);
+    //console.log(markets);
     await CoinMarket.updateReserves(provider, markets);
     const sendVals = await Promise.all(_.map(markets, market => CoinMarket.sendUpdate(market)));
     if(block - startBlock == 30  && flag ) {
     await swapBlock(markets, provider);
-    flag = false
+    flag = false;
   }
   });
   
-   };
-
+};
 // swap provider 
-   const swapBlock = async(markets, provider) => {
+const swapBlock = async(markets, provider) => {
    
       provider.off('block');
     
@@ -115,7 +122,8 @@ const tone = async() =>{
       }
       const newProvider = new ethers.providers.JsonRpcProvider(url)
       await updateMarkets(markets, newProvider);  
-   };
+};
+
 
 // async function main(){
 //   const provider = new ethers.providers.JsonRpcProvider(process.env.infura);
@@ -131,10 +139,11 @@ const tone = async() =>{
 //   //console.log(market)
 // };
 // main();
+
 swapToken();
-   module.exports = {
+module.exports = {
  pullMarkets,  
  updateMarkets,
  portion,
  readJsonMarket,
-   };
+};

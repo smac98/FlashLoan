@@ -1,5 +1,5 @@
 require('dotenv').config()
-const {updateMarkets,readJsonMarket,} = require("./maketUpdated");
+const {updateMarkets,readJsonMarket,pullMarkets} = require("./maketUpdated");
 const { ethers } = require("ethers");
 const {updateTokenFromJson} = require('./tokenUpdate');
 const {FACTORY_ADDRESSES, addresses , WETH_ADDRESS} = require('./polygon/address')
@@ -20,18 +20,19 @@ const { findAll,
 async function main(){
  
     //tokenPop()
-      let market = await CoinMarket.getUniswapMarketsByToken(provider, addresses.FACTORY);
-      provider.on('block', async (block) => {
-        //  await CoinMarket.updateReserves(provider, market.allMarketPairs);
-      });
+      // let market = await CoinMarket.getUniswapMarketsByToken(provider, addresses.FACTORY);
+      // provider.on('block', async (block) => {
+      //   //  await CoinMarket.updateReserves(provider, market.allMarketPairs);
+      // });
   
 
   //  let long= await findTopTenMakretPD0();
-//  let long2= await findTopTenMakretPD1();
-//   await readJsonMarket().then(async(markets)=>{
-//     await updateTokenFromJson();
-//     await updateMarkets(markets,provider);
-//   });
+  //  let long2= await findTopTenMakretPD1();
+ 
+await readJsonMarket().then(async(markets)=>{
+    await updateTokenFromJson();
+    await updateMarkets(markets,provider);
+  });
  //console.log(long)
  //console.log(long2)
  //

@@ -236,7 +236,7 @@ class CoinMarket extends EVMUniClone {
       abi.UNISWAP_QUERY_ABI_DEC,
       provider
     );
-   // console.log(allMarketPairs)
+  // console.log(allMarketPairs)
     const pairAddresses = allMarketPairs.map(
       (marketPair) => marketPair.marketAddress
     );
